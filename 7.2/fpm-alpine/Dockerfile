@@ -32,11 +32,16 @@ RUN apk add --no-cache \
         curl \
         wget \
         unzip \
+        supervisor \
     && \
     sed -i '/\(default_bits\|default_md\)/s/^# *//' /etc/ssl/openssl.cnf
 
 # Add recommended opcache settings from https://secure.php.net/manual/en/opcache.installation.php
 COPY opcache-recommended.ini /usr/local/etc/php/conf.d/opcache-recommended.ini
 COPY typo3-php.ini /usr/local/etc/php/conf.d/typo3.ini
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 VOLUME /var/www/html
+
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]

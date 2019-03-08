@@ -35,6 +35,7 @@ RUN apt-get update && \
         cron \
         wget \
         unzip \
+        supervisor \
     && \
     rm -rf /var/lib/apt/lists/*
 
@@ -44,5 +45,9 @@ RUN a2enmod rewrite expires
 COPY opcache-recommended.ini /usr/local/etc/php/conf.d/opcache-recommended.ini
 COPY typo3-php.ini /usr/local/etc/php/conf.d/typo3.ini
 COPY typo3-apache2.conf /etc/apache2/conf-enabled/typo3.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 VOLUME /var/www/html
+
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
