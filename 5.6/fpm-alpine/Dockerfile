@@ -21,6 +21,7 @@ RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
 
 RUN apk add --no-cache \
         imagemagick \
+        ghostscript \
         bash \
         nano \
         tzdata \

@@ -2,4 +2,4 @@
 #
 # Build Docker images locally
 
-docker build -t crinis/typo3-php:5.6 .
+docker build -t crinis/typo3-php:5.6-apache .

@@ -32,6 +32,7 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         imagemagick \
+        ghostscript \
         nano \
         libyaml-0-2 \
         cron \
