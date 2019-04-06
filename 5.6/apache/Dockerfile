@@ -13,7 +13,7 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
     && \
     rm -rf /var/lib/apt/lists/* && \
     export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" && \
-    pecl install apcu && \
+    pecl install apcu-4.0.11 && \
     docker-php-ext-configure gd \
         --with-gd \
         --with-freetype-dir=/usr \
