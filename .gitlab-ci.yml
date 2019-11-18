@@ -133,7 +133,7 @@ build:on-schedules:
           docker push $IMAGE_REPOSITORY:7.1-fpm-alpine-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.2-apache-$git_tag -f 7.2/apache/Dockerfile 7.2/apache/
           docker push $IMAGE_REPOSITORY:7.2-apache-$git_tag
-          docker tag $IMAGE_REPOSITORY:7.2-apache-$git_tag $IMAGE_REPOSITORY:7.2--$git_tag
+          docker tag $IMAGE_REPOSITORY:7.2-apache-$git_tag $IMAGE_REPOSITORY:7.2-$git_tag
           docker push $IMAGE_REPOSITORY:7.2-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine-$git_tag -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
           docker push $IMAGE_REPOSITORY:7.2-fpm-alpine-$git_tag
