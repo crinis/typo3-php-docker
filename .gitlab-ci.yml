@@ -139,6 +139,8 @@ build:on-schedules:
           docker push $IMAGE_REPOSITORY:$git_tag-php7.2
           docker tag $IMAGE_REPOSITORY:$git_tag-php7.2-apache $IMAGE_REPOSITORY:$git_tag
           docker push $IMAGE_REPOSITORY:$git_tag
+          docker build -t $IMAGE_REPOSITORY:$git_tag-php7.2-fpm-alpine -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
+          docker push $IMAGE_REPOSITORY:$git_tag-php7.2-fpm-alpine
         fi
       done
 
