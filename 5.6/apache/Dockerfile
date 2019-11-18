@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:5.6-apache-stretch
 
 ENV SERVER_ADMIN_EMAIL="you@example.com"
 
