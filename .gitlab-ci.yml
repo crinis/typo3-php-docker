@@ -103,10 +103,20 @@ build:on-schedules:
   script:
     - apk update && apk add git sort
     - function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
+    - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
+    - docker push $IMAGE_REPOSITORY:5.6-apache
+    - docker build -t $IMAGE_REPOSITORY:5.6-fpm-alpine -f 5.6/fpm-alpine/Dockerfile 5.6/fpm-alpine/
+    - docker push $IMAGE_REPOSITORY:5.6-fpm-alpine
+    - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
+    - docker push $IMAGE_REPOSITORY:7.1-apache
+    - docker build -t $IMAGE_REPOSITORY:7.1-fpm-alpine -f 7.1/fpm-alpine/Dockerfile 7.1/fpm-alpine/
+    - docker push $IMAGE_REPOSITORY:7.1-fpm-alpine
     - docker build -t $IMAGE_REPOSITORY:7.2-apache -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache
     - docker tag $IMAGE_REPOSITORY:7.2-apache $IMAGE_REPOSITORY:latest
     - docker push $IMAGE_REPOSITORY:latest
+    - docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
+    - docker push $IMAGE_REPOSITORY:7.2-fpm-alpine
     - > 
       for git_tag in $(git tag); do
         if version_gt $git_tag '0.1.1'; then
