@@ -13,19 +13,15 @@ build-5.6-apache:
   except:
     - schedules
   script:
-    - docker build -t $IMAGE_REPOSITORY:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
+    - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
     - docker push $IMAGE_REPOSITORY:5.6-apache
-    - docker tag $IMAGE_REPOSITORY:5.6-apache $IMAGE_REPOSITORY:5.6
-    - docker push $IMAGE_REPOSITORY:5.6
 
-build-5.6-apache:on-tags:
+build-5.6-apache-stretch:on-tags:
   only:
     - tags
   script:
     - docker build -t $IMAGE_REPOSITORY:5.6-apache-$CI_COMMIT_TAG -f 5.6/apache/Dockerfile 5.6/apache/
     - docker push $IMAGE_REPOSITORY:5.6-apache-$CI_COMMIT_TAG
-    - docker tag $IMAGE_REPOSITORY:5.6-apache-$CI_COMMIT_TAG $IMAGE_REPOSITORY:5.6-$CI_COMMIT_TAG
-    - docker push $IMAGE_REPOSITORY:5.6-$CI_COMMIT_TAG
 
 build-5.6-fpm-alpine:
   except:
@@ -47,8 +43,6 @@ build-7.1-apache:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
     - docker push $IMAGE_REPOSITORY:7.1-apache
-    - docker tag $IMAGE_REPOSITORY:7.1-apache $IMAGE_REPOSITORY:7.1
-    - docker push $IMAGE_REPOSITORY:7.1
 
 build-7.1-apache:on-tags:
   only:
@@ -56,8 +50,6 @@ build-7.1-apache:on-tags:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.1-apache-$CI_COMMIT_TAG -f 7.1/apache/Dockerfile 7.1/apache/
     - docker push $IMAGE_REPOSITORY:7.1-apache-$CI_COMMIT_TAG
-    - docker tag $IMAGE_REPOSITORY:7.1-apache-$CI_COMMIT_TAG $IMAGE_REPOSITORY:7.1-$CI_COMMIT_TAG
-    - docker push $IMAGE_REPOSITORY:7.1-$CI_COMMIT_TAG
 
 build-7.1-fpm-alpine:
   except:
@@ -79,8 +71,6 @@ build-7.2-apache:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.2-apache -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache
-    - docker tag $IMAGE_REPOSITORY:7.2-apache $IMAGE_REPOSITORY:7.2
-    - docker push $IMAGE_REPOSITORY:7.2
     - docker tag $IMAGE_REPOSITORY:7.2-apache $IMAGE_REPOSITORY:latest
     - docker push $IMAGE_REPOSITORY:latest
 
@@ -90,8 +80,6 @@ build-7.2-apache:on-tags:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.2-apache-$CI_COMMIT_TAG -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache-$CI_COMMIT_TAG
-    - docker tag $IMAGE_REPOSITORY:7.2-apache-$CI_COMMIT_TAG $IMAGE_REPOSITORY:7.2-$CI_COMMIT_TAG
-    - docker push $IMAGE_REPOSITORY:7.2-$CI_COMMIT_TAG
 
 build-7.2-fpm-alpine:
   except:
@@ -121,20 +109,14 @@ build:on-schedules:
           git checkout tags/$git_tag
           docker build -t $IMAGE_REPOSITORY:5.6-apache-$git_tag -f 5.6/apache/Dockerfile 5.6/apache/
           docker push $IMAGE_REPOSITORY:5.6-apache-$git_tag
-          docker tag $IMAGE_REPOSITORY:5.6-apache-$git_tag $IMAGE_REPOSITORY:5.6-$git_tag
-          docker push $IMAGE_REPOSITORY:5.6-$git_tag
           docker build -t $IMAGE_REPOSITORY:5.6-fpm-alpine-$git_tag -f 5.6/fpm-alpine/Dockerfile 5.6/fpm-alpine/
           docker push $IMAGE_REPOSITORY:5.6-fpm-alpine-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.1-apache-$git_tag -f 7.1/apache/Dockerfile 7.1/apache/
           docker push $IMAGE_REPOSITORY:7.1-apache-$git_tag
-          docker tag $IMAGE_REPOSITORY:7.1-apache-$git_tag $IMAGE_REPOSITORY:7.1-$git_tag
-          docker push $IMAGE_REPOSITORY:7.1-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.1-fpm-alpine-$git_tag -f 7.1/fpm-alpine/Dockerfile 7.1/fpm-alpine/
           docker push $IMAGE_REPOSITORY:7.1-fpm-alpine-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.2-apache-$git_tag -f 7.2/apache/Dockerfile 7.2/apache/
           docker push $IMAGE_REPOSITORY:7.2-apache-$git_tag
-          docker tag $IMAGE_REPOSITORY:7.2-apache-$git_tag $IMAGE_REPOSITORY:7.2-$git_tag
-          docker push $IMAGE_REPOSITORY:7.2-$git_tag
           docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine-$git_tag -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
           docker push $IMAGE_REPOSITORY:7.2-fpm-alpine-$git_tag
         fi

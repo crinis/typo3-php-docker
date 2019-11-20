@@ -1,4 +1,4 @@
-FROM php:7.2-apache-stretch
+FROM php:7.2-apache-buster
 
 ENV SERVER_ADMIN_EMAIL="you@example.com"
 

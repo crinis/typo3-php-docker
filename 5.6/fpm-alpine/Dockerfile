@@ -1,4 +1,4 @@
-FROM php:5.6-fpm-alpine
+FROM php:5.6-fpm-alpine3.8
 
 RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         freetype-dev \
