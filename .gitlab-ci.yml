@@ -83,11 +83,5 @@ build:on-schedules:
     - docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
     - docker push $IMAGE_REPOSITORY:7.2-fpm-alpine
 
-trigger-typo3-build:on-schedules:
-  stage: trigger-typo3-build
-  only:
-    - schedules
-  trigger: crinis-org/docker-images/typo3-docker
-
 after_script:
   - docker logout
