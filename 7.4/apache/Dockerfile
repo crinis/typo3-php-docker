@@ -39,6 +39,7 @@ RUN apt-get update && \
         wget \
         unzip \
         supervisor \
+        libzip4 \
     && \
     rm -rf /var/lib/apt/lists/*
 

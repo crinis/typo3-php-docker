@@ -35,6 +35,7 @@ RUN apk add --no-cache \
         wget \
         unzip \
         supervisor \
+        libzip \
     && \
     sed -i '/\(default_bits\|default_md\)/s/^# *//' /etc/ssl/openssl.cnf
 
