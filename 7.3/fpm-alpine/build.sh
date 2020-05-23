@@ -2,4 +2,4 @@
 #
 # Build Docker images locally
 
-docker build -t crinis/typo3-php:7.2-apache .
+docker build -t crinis/typo3-php:7.3-fpm-alpine .
