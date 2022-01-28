@@ -53,5 +53,4 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 VOLUME /var/www/html
 
-ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
