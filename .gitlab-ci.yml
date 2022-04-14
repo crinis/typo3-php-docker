@@ -21,14 +21,6 @@ build-5.6-apache:
     - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
     - docker push $IMAGE_REPOSITORY:5.6-apache
 
-build-5.6-fpm-alpine:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:5.6-fpm-alpine -f 5.6/fpm-alpine/Dockerfile 5.6/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:5.6-fpm-alpine
-
 build-7.1-apache:
   stage: build
   except:
@@ -36,14 +28,6 @@ build-7.1-apache:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
     - docker push $IMAGE_REPOSITORY:7.1-apache
-
-build-7.1-fpm-alpine:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:7.1-fpm-alpine -f 7.1/fpm-alpine/Dockerfile 7.1/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.1-fpm-alpine
 
 build-7.2-apache:
   stage: build
@@ -53,14 +37,6 @@ build-7.2-apache:
     - docker build -t $IMAGE_REPOSITORY:7.2-apache -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache
 
-build-7.2-fpm-alpine:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.2-fpm-alpine
-
 build-7.3-apache:
   stage: build
   except:
@@ -68,14 +44,6 @@ build-7.3-apache:
   script:
     - docker build -t $IMAGE_REPOSITORY:7.3-apache -f 7.3/apache/Dockerfile 7.3/apache/
     - docker push $IMAGE_REPOSITORY:7.3-apache
-
-build-7.3-fpm-alpine:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:7.3-fpm-alpine -f 7.3/fpm-alpine/Dockerfile 7.3/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.3-fpm-alpine
 
 build-7.4-apache:
   stage: build
@@ -87,14 +55,6 @@ build-7.4-apache:
     - docker tag $IMAGE_REPOSITORY:7.4-apache $IMAGE_REPOSITORY:latest
     - docker push $IMAGE_REPOSITORY:latest
 
-build-7.4-fpm-alpine:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:7.4-fpm-alpine -f 7.4/fpm-alpine/Dockerfile 7.4/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.4-fpm-alpine
-
 build:on-schedules:
   stage: build
   only:
@@ -102,25 +62,15 @@ build:on-schedules:
   script:
     - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
     - docker push $IMAGE_REPOSITORY:5.6-apache
-    - docker build -t $IMAGE_REPOSITORY:5.6-fpm-alpine -f 5.6/fpm-alpine/Dockerfile 5.6/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:5.6-fpm-alpine
     - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
     - docker push $IMAGE_REPOSITORY:7.1-apache
-    - docker build -t $IMAGE_REPOSITORY:7.1-fpm-alpine -f 7.1/fpm-alpine/Dockerfile 7.1/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.1-fpm-alpine
     - docker build -t $IMAGE_REPOSITORY:7.2-apache -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache
-    - docker build -t $IMAGE_REPOSITORY:7.2-fpm-alpine -f 7.2/fpm-alpine/Dockerfile 7.2/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.2-fpm-alpine
     - docker build -t $IMAGE_REPOSITORY:7.3-apache -f 7.3/apache/Dockerfile 7.3/apache/
     - docker push $IMAGE_REPOSITORY:7.3-apache
-    - docker build -t $IMAGE_REPOSITORY:7.3-fpm-alpine -f 7.3/fpm-alpine/Dockerfile 7.3/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.3-fpm-alpine
     - docker build -t $IMAGE_REPOSITORY:7.4-apache -f 7.4/apache/Dockerfile 7.4/apache/
     - docker push $IMAGE_REPOSITORY:7.4-apache
     - docker tag $IMAGE_REPOSITORY:7.4-apache $IMAGE_REPOSITORY:latest
     - docker push $IMAGE_REPOSITORY:latest
-    - docker build -t $IMAGE_REPOSITORY:7.4-fpm-alpine -f 7.4/fpm-alpine/Dockerfile 7.4/fpm-alpine/
-    - docker push $IMAGE_REPOSITORY:7.4-fpm-alpine
 after_script:
   - docker logout
