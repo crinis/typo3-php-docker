@@ -11,23 +11,6 @@ before_script:
 
 stages:
   - build
-  - trigger-typo3-build
-
-build-5.6-apache:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
-    - docker push $IMAGE_REPOSITORY:5.6-apache
-
-build-7.1-apache:
-  stage: build
-  except:
-    - schedules
-  script:
-    - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
-    - docker push $IMAGE_REPOSITORY:7.1-apache
 
 build-7.2-apache:
   stage: build
@@ -68,10 +51,6 @@ build:on-schedules:
   only:
     - schedules
   script:
-    - docker build -t ${IMAGE_REPOSITORY}:5.6-apache -f 5.6/apache/Dockerfile 5.6/apache/
-    - docker push $IMAGE_REPOSITORY:5.6-apache
-    - docker build -t $IMAGE_REPOSITORY:7.1-apache -f 7.1/apache/Dockerfile 7.1/apache/
-    - docker push $IMAGE_REPOSITORY:7.1-apache
     - docker build -t $IMAGE_REPOSITORY:7.2-apache -f 7.2/apache/Dockerfile 7.2/apache/
     - docker push $IMAGE_REPOSITORY:7.2-apache
     - docker build -t $IMAGE_REPOSITORY:7.3-apache -f 7.3/apache/Dockerfile 7.3/apache/
