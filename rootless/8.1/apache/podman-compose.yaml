@@ -1,0 +1,16 @@
+version: "3"
+services:
+
+  php:
+    image: crinis/typo3-php:8.1-apache-rootless
+    user: ${DOCKER_UID:-1000}:${DOCKER_GID:-1000}
+    volumes:
+      - "./var/:/var/www/html/var/:Z"
+      - "./public/:/var/www/html/public/:Z"
+      - "./vendor/:/var/www/html/vendor/:Z"
+      - "./config/:/var/www/html/config/:Z"
+      - "./packages/:/var/www/html/packages/:Z"
+    ports:
+      - 8080:8080
+    userns_mode: "keep-id"
+
