@@ -35,7 +35,6 @@ RUN apt-get update && \
         ghostscript \
         nano \
         libyaml-0-2 \
-        cron \
         unzip \
         wget \
         unzip \
@@ -48,6 +47,18 @@ RUN a2enmod rewrite expires headers
 RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-enabled/000-default.conf && \
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
+
+ARG SUPERCRONIC_SHA1SUM=6817299e04457e5d6ec4809c72ee13a43e95ba41
+ARG SUPERCRONIC_VERSION=0.2.24
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=${SUPERCRONIC_SHA1SUM}
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" && \
+    echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - && \
+    chmod +x "$SUPERCRONIC" && \
+    mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" && \
+    ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
 # Add recommended opcache settings from https://secure.php.net/manual/en/opcache.installation.php
 COPY opcache-recommended.ini /usr/local/etc/php/conf.d/opcache-recommended.ini
