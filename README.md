@@ -2,6 +2,10 @@
 
 PHP Docker images configured for TYPO3. They are meant as base images for my [TYPO3 Images](https://github.com/crinis/typo3-docker), but can also be used for e.g. local development with composer.
 
+## TAGS
+
+You can see all our tags [here](https://hub.docker.com/repository/docker/crinis/typo3-php/tags). PHP images will only be updated as long as the used PHP-Version are supported. You can find currently supported PHP-Versions [here](https://www.php.net/supported-versions.php).
+
 ## Scheduler
 
 To run the TYPO3 scheduler via cronjob you have to add a crontab file. You can create a child image and add a crontab file as a volume or configmap.
