@@ -15,6 +15,7 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.1'
+          - '8.2'
     runs-on: ubuntu-latest
     steps:
       -
@@ -32,7 +33,7 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v4
-        if: matrix.php != '8.1'
+        if: matrix.php != '8.2'
         with:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
@@ -41,7 +42,7 @@ jobs:
       -
         name: Build and push latest
         uses: docker/build-push-action@v4
-        if: matrix.php == '8.1'
+        if: matrix.php == '8.2'
         with:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
