@@ -3,12 +3,9 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron: '0 0 * * 0'
-  push:
-    branches:
-      - master
 
 env:
-  IMAGE_REPOSITORY: crinis/typo3-php
+  IMAGE_NAME: typo3-php
 
 jobs:
   build:
@@ -40,7 +37,7 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPOSITORY }}:${{ matrix.php }}-apache
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache
       -
         name: Build and push latest
         uses: docker/build-push-action@v4
@@ -49,4 +46,4 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPOSITORY }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPOSITORY }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
