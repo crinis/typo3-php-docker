@@ -2,4 +2,4 @@
 #
 # Build Docker images locally
 
-docker build -t crinis/typo3-php:7.4-apache .
+podman build -t crinis/typo3-php:7.4-apache .

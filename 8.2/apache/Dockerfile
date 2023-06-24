@@ -25,7 +25,8 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
     docker-php-ext-enable apcu yaml && \
     apt-mark auto '.*' > /dev/null && \
     apt-mark manual $savedAptMark && \
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

@@ -1,7 +1,5 @@
 FROM php:8.1-apache-bullseye
 
-ENV SERVER_ADMIN_EMAIL="you@example.com"
-
 RUN savedAptMark="$(apt-mark showmanual)" && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -27,7 +25,8 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
     docker-php-ext-enable apcu yaml && \
     apt-mark auto '.*' > /dev/null && \
     apt-mark manual $savedAptMark && \
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -63,6 +62,5 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" && \
 # Add recommended opcache settings from https://secure.php.net/manual/en/opcache.installation.php
 COPY opcache-recommended.ini /usr/local/etc/php/conf.d/opcache-recommended.ini
 COPY typo3-php.ini /usr/local/etc/php/conf.d/typo3.ini
-COPY typo3-apache2.conf /etc/apache2/conf-enabled/typo3.conf
 
 VOLUME /var/www/html
