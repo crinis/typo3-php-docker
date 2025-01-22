@@ -38,6 +38,7 @@ jobs:
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache
+          platforms: linux/amd64
       -
         name: Build and push latest
         uses: docker/build-push-action@v4
@@ -47,3 +48,17 @@ jobs:
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          platforms: linux/amd64
+      -
+        name: Build and push latest ARM
+        uses: docker/build-push-action@v4
+        if: matrix.php == '8.4'
+        with:
+          context: ${{ matrix.php }}/apache
+          file: ${{ matrix.php }}/apache/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          platforms: linux/arm64
+          build-args: |
+            SUPERCRONIC_SHA1SUM=e0f0c06ebc5627e43b25475711e694450489ab00
+            SUPERCRONIC_ARCHITECTURE=arm64
