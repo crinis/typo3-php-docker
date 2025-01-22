@@ -1,4 +1,4 @@
-FROM php:8.1-apache-bullseye
+FROM php:8.4-apache-bookworm
 
 RUN savedAptMark="$(apt-mark showmanual)" && \
     apt-get update && \
@@ -34,6 +34,7 @@ RUN apt-get update && \
         ghostscript \
         nano \
         libyaml-0-2 \
+        cron \
         unzip \
         wget \
         unzip \
@@ -47,10 +48,11 @@ RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-en
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
 
-ARG SUPERCRONIC_SHA1SUM=6817299e04457e5d6ec4809c72ee13a43e95ba41
-ARG SUPERCRONIC_VERSION=0.2.24
-ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-amd64 \
-    SUPERCRONIC=supercronic-linux-amd64 \
+ARG SUPERCRONIC_SHA1SUM=71b0d58cc53f6bd72cf2f293e09e294b79c666d8
+ARG SUPERCRONIC_VERSION=0.2.33
+ARG SUPERCRONIC_ARCHITECTURE=amd64
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-${SUPERCRONIC_ARCHITECTURE} \
+    SUPERCRONIC=supercronic-linux-${SUPERCRONIC_ARCHITECTURE} \
     SUPERCRONIC_SHA1SUM=${SUPERCRONIC_SHA1SUM}
 
 RUN curl -fsSLO "$SUPERCRONIC_URL" && \
@@ -59,8 +61,6 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" && \
     mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" && \
     ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
-# Add recommended opcache settings from https://secure.php.net/manual/en/opcache.installation.php
-COPY opcache-recommended.ini /usr/local/etc/php/conf.d/opcache-recommended.ini
-COPY typo3-php.ini /usr/local/etc/php/conf.d/typo3.ini
+COPY php/ /usr/local/etc/php/conf.d/
 
 VOLUME /var/www/html
