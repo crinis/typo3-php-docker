@@ -8,7 +8,7 @@ env:
   IMAGE_NAME: typo3-php
 
 jobs:
-  build-amd:
+  build:
     strategy:
       matrix:
         php:
@@ -24,6 +24,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
@@ -43,34 +45,4 @@ jobs:
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-          platforms: linux/amd64
-
-  build-arm:
-    strategy:
-      matrix:
-        php:
-          - "8.4"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push latest ARM
-        uses: docker/build-push-action@v6
-        with:
-          context: ${{ matrix.php }}/apache
-          file: ${{ matrix.php }}/apache/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-          platforms: linux/arm64
-          build-args: |
-            SUPERCRONIC_SHA1SUM=e0f0c06ebc5627e43b25475711e694450489ab00
-            SUPERCRONIC_ARCHITECTURE=arm64
+          platforms: linux/amd64, linux/arm64

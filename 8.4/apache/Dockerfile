@@ -48,18 +48,24 @@ RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-en
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
 
-ARG SUPERCRONIC_SHA1SUM=71b0d58cc53f6bd72cf2f293e09e294b79c666d8
-ARG SUPERCRONIC_VERSION=0.2.33
-ARG SUPERCRONIC_ARCHITECTURE=amd64
-ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-${SUPERCRONIC_ARCHITECTURE} \
-    SUPERCRONIC=supercronic-linux-${SUPERCRONIC_ARCHITECTURE} \
-    SUPERCRONIC_SHA1SUM=${SUPERCRONIC_SHA1SUM}
 
-RUN curl -fsSLO "$SUPERCRONIC_URL" && \
-    echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - && \
-    chmod +x "$SUPERCRONIC" && \
-    mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" && \
-    ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+# Install supercronic
+ARG SUPERCRONIC_VERSION=0.2.33
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then \
+        SUPERCRONIC_ARCHITECTURE="amd64"; \
+        SUPERCRONIC_SHA1SUM="71b0d58cc53f6bd72cf2f293e09e294b79c666d8"; \
+    elif [ "$ARCH" = "arm64" ]; then \
+        SUPERCRONIC_ARCHITECTURE="arm64"; \
+        SUPERCRONIC_SHA1SUM="e0f0c06ebc5627e43b25475711e694450489ab00"; \
+    else \
+        echo "Unsupported architecture: $ARCH"; exit 1; \
+    fi && \
+    SUPERCRONIC_URL="https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" && \
+    curl -fsSLO "$SUPERCRONIC_URL" && \
+    echo "${SUPERCRONIC_SHA1SUM}  supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" | sha1sum -c - && \
+    chmod +x "supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" && \
+    mv "supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" /usr/local/bin/supercronic
 
 COPY php/ /usr/local/etc/php/conf.d/
 
