@@ -44,9 +44,17 @@ RUN apt-get update && \
 
 RUN a2enmod rewrite expires headers
 
+COPY php/ /usr/local/etc/php/conf.d/
+COPY entrypoint.sh /usr/local/bin/typo3-php-entrypoint
+
+# Adjust Apache configuration. Set document root to /var/www/html/public as this is the default in modern TYPO3 installations
+# and allows having non-public files in the /var/www/html directory. Also, change the port to 8080. This will be changed back to 80
+# by the entrypoint script if the container is started as root.
 RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-enabled/000-default.conf && \
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
-    sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
+    sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf && \
+    chmod 755 /usr/local/bin/typo3-php-entrypoint && \
+    chmod 644 /usr/local/etc/php/conf.d/opcache-recommended.ini /usr/local/etc/php/conf.d/typo3.ini
 
 # Install supercronic.
 ARG SUPERCRONIC_VERSION=0.2.33
@@ -81,3 +89,6 @@ EXPOSE 8080
 
 VOLUME /var/www/html
 WORKDIR /var/www/html
+
+ENTRYPOINT ["typo3-php-entrypoint"]
+CMD ["apache2-foreground"]
