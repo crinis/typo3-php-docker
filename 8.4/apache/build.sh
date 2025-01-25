@@ -16,4 +16,4 @@ if [ "$TOOL" != "docker" ] && [ "$TOOL" != "podman" ]; then
     exit 1
 fi
 
-$TOOL build -t crinis/typo3-php:8.4-apache .
+$TOOL build -t docker.io/crinis/typo3-php:8.4-apache .

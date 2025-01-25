@@ -2,7 +2,7 @@ version: "3"
 services:
 
   php:
-    image: crinis/typo3-php:8.4-apache
+    image: docker.io/crinis/typo3-php:8.4-apache
     user: ${DOCKER_UID:-1000}:${DOCKER_GID:-1000}
     volumes:
       - "./var/:/var/www/html/var/:Z"
@@ -14,7 +14,7 @@ services:
       - 8080:8080
     userns_mode: "keep-id"
   cron:
-    image: crinis/typo3-php:8.4-apache
+    image: docker.io/crinis/typo3-php:8.4-apache
     user: ${DOCKER_UID:-1000}:${DOCKER_GID:-1000}
     volumes:
       - "./var/:/var/www/html/var/:Z"

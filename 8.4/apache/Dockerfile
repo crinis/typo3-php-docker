@@ -1,4 +1,4 @@
-FROM php:8.4-apache-bookworm
+FROM docker.io/library/php:8.4-apache-bookworm
 
 RUN savedAptMark="$(apt-mark showmanual)" && \
     apt-get update && \
@@ -48,8 +48,7 @@ RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-en
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
 
-
-# Install supercronic
+# Install supercronic.
 ARG SUPERCRONIC_VERSION=0.2.33
 RUN ARCH=$(dpkg --print-architecture) && \
     if [ "$ARCH" = "amd64" ]; then \
@@ -62,11 +61,23 @@ RUN ARCH=$(dpkg --print-architecture) && \
         echo "Unsupported architecture: $ARCH"; exit 1; \
     fi && \
     SUPERCRONIC_URL="https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" && \
-    curl -fsSLO "$SUPERCRONIC_URL" && \
+    curl -fsSLO "${SUPERCRONIC_URL}" && \
     echo "${SUPERCRONIC_SHA1SUM}  supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" | sha1sum -c - && \
-    chmod +x "supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" && \
+    chmod 755 "supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" && \
     mv "supercronic-linux-${SUPERCRONIC_ARCHITECTURE}" /usr/local/bin/supercronic
 
-COPY php/ /usr/local/etc/php/conf.d/
+# Install composer.
+ARG COMPOSER_VERSION=2.8.5
+RUN COMPOSER_URL="https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar" && \
+    curl -fsSLO "${COMPOSER_URL}" && \
+    echo "716049bb9bd889e0702e96bdfcb0214082f1bbfd composer.phar" | sha1sum -c - && \
+    chmod 755 composer.phar && \
+    mv composer.phar /usr/local/bin/composer
+
+ENV SET_OWNER="true"
+
+# Expose port 8080 for non-root usage.
+EXPOSE 8080
 
 VOLUME /var/www/html
+WORKDIR /var/www/html
