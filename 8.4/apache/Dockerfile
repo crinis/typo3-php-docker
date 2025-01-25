@@ -39,6 +39,7 @@ RUN apt-get update && \
         wget \
         unzip \
         libzip4 \
+        jq \
     && \
     rm -rf /var/lib/apt/lists/*
 
