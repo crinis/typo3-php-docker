@@ -54,8 +54,9 @@ COPY entrypoint.sh /usr/local/bin/typo3-php-entrypoint
 RUN sed -i 's/\/var\/www\/html/\/var\/www\/html\/public/g' /etc/apache2/sites-enabled/000-default.conf && \
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf && \
-    chmod 755 /usr/local/bin/typo3-php-entrypoint && \
-    chmod 644 /usr/local/etc/php/conf.d/opcache-recommended.ini /usr/local/etc/php/conf.d/typo3.ini
+    chmod 0755 /usr/local/bin/typo3-php-entrypoint && \
+    chmod 0644 /usr/local/etc/php/conf.d/opcache-recommended.ini /usr/local/etc/php/conf.d/typo3.ini && \
+    chmod 2770 /var/www/html
 
 # Install supercronic.
 ARG SUPERCRONIC_VERSION=0.2.33
@@ -87,9 +88,6 @@ ENV SET_OWNER="true"
 
 # Expose port 8080 for non-root usage.
 EXPOSE 8080
-
-VOLUME /var/www/html
-WORKDIR /var/www/html
 
 ENTRYPOINT ["typo3-php-entrypoint"]
 CMD ["apache2-foreground"]
