@@ -40,6 +40,7 @@ RUN apt-get update && \
         unzip \
         libzip4 \
         jq \
+        gosu \
     && \
     rm -rf /var/lib/apt/lists/*
 
