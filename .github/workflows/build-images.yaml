@@ -31,7 +31,7 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:amd64-${{ matrix.php }}-apache
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-amd64
       - name: Build and push latest
         uses: docker/build-push-action@v6
         if: matrix.php == '8.4'
@@ -39,7 +39,7 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:amd64-${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:amd64-latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-amd64, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest-amd64
   
   build-arm64:
     strategy:
@@ -64,7 +64,7 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:arm64-${{ matrix.php }}-apache
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-arm64
       - name: Build and push latest
         uses: docker/build-push-action@v6
         if: matrix.php == '8.4'
@@ -72,7 +72,7 @@ jobs:
           context: ${{ matrix.php }}/apache
           file: ${{ matrix.php }}/apache/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:arm64-${{ matrix.php }}-apache, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:arm64-latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-arm64, ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest-arm64
 
 
   create-manifests:
@@ -95,14 +95,15 @@ jobs:
       - name: Create manifest for tag ${{ matrix.php }}-apache and push
         run: |
           docker manifest create \
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache
-            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:amd64-${{ matrix.php }}-apache
-            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:arm64-${{ matrix.php }}-apache
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache \
+            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-amd64 \
+            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache-arm64
           docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.php }}-apache
 
       - name: Create latest manifest and push
+        if: matrix.php == '8.4'
         run: |
           docker manifest create \
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:amd64-latest
-            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:arm64-latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest \
+            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest-amd64 \
+            --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest-arm64
