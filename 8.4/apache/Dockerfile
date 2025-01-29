@@ -7,6 +7,8 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
         libtool \
         libjpeg-dev \
         libpng-dev \
+        libwebp-dev \
+        libavif-dev \
         libxml2-dev \
         libicu-dev \
         libyaml-dev \
@@ -17,11 +19,13 @@ RUN savedAptMark="$(apt-mark showmanual)" && \
     pecl install apcu yaml && \
     docker-php-ext-configure gd \
         --enable-gd \
-        --with-freetype=/usr \
-        --with-jpeg=/usr \
+        --with-freetype \
+        --with-jpeg\
+        --with-webp \
+        --with-avif \
     && \
     docker-php-ext-configure intl --enable-intl && \
-    docker-php-ext-install gd mysqli opcache zip intl && \
+    docker-php-ext-install gd mysqli opcache zip intl pdo pdo_mysql exif && \
     docker-php-ext-enable apcu yaml && \
     apt-mark auto '.*' > /dev/null && \
     apt-mark manual $savedAptMark && \
@@ -39,10 +43,27 @@ RUN apt-get update && \
         wget \
         unzip \
         libzip4 \
+        libavif15 \
         jq \
         gosu \
+        locales \
     && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    # Setup common locales.
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "es_ES.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "it_IT.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "nl_NL.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "pt_PT.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "sv_SE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "fi_FI.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "nb_NO.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "da_DK.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "pl_PL.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
 
 RUN a2enmod rewrite expires headers
 
